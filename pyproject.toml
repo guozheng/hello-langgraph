@@ -1,0 +1,17 @@
+[project]
+name = "hello-langgraph"
+version = "0.1.0"
+description = "A simple LangGraph project demonstrating basic workflow creation and state management with a chatbot example using LMStudio local LLM."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.12"
+dependencies = [
+    "langgraph>=0.2.0",
+    "langchain>=0.3.0",
+    "langchain-openai>=0.2.0",
+    "python-dotenv>=1.0.0",
+    "requests>=2.31.0",
+    "langgraph-api>=0.2.132",
+    "langgraph-cli[inmem]>=0.1.0"
+]
+
