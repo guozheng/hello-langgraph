@@ -1,6 +1,6 @@
-# Hello LangGraph 🚀
+# Running LangGraph with LMStudio and UV 🚀
 
-A simple LangGraph project demonstrating basic workflow creation and state management with a chatbot example using LMStudio local LLM.
+A simple [LangGraph](https://langchain-ai.github.io/langgraph/) project demonstrating basic workflow creation and state management with a chatbot example using [LMStudio](https://lmstudio.ai/) local LLM. Package management uses [UV](https://github.com/indygreg/uv), the fastest package manager for Python.
 
 ## Features
 
@@ -12,8 +12,9 @@ A simple LangGraph project demonstrating basic workflow creation and state manag
 ## Prerequisites
 
 - Python 3.12 or higher
-- LMStudio installed and running
-- qwen3-4b-2507 model loaded in LMStudio
+- [UV](https://github.com/indygreg/uv) installed and running
+- [LMStudio](https://lmstudio.ai/) installed and running
+- [qwen3-4b-2507](https://lmstudio.ai/models/qwen/qwen3-4b-2507) model loaded in LMStudio, if your computer has enough resources, you can also try [gpt-oos-20b](https://lmstudio.ai/models/openai/gpt-oos-20b)
 
 ## Installation
 
@@ -24,8 +25,12 @@ A simple LangGraph project demonstrating basic workflow creation and state manag
    ```
 
 2. **Install dependencies**:
+   - [LangGraph CLI](https://docs.langchain.com/langgraph-platform/langgraph-cli) is a tool for building and running LangGraph API server locally.
+   - The official documentation installs `langgraph-cli` using `pip` or Homebrew, we use UV to install it here.
+   - A UV tool is a self-contained executable that can be installed and run from the command line. We install `langgraph-cli` tool using UV, then update the shell to make it available in the PATH.
    ```bash
-   pip install -e .
+   uv tool install langgraph-cli
+   uv tool update-shell
    ```
 
 3. **Set up LMStudio**:
@@ -33,42 +38,119 @@ A simple LangGraph project demonstrating basic workflow creation and state manag
    - Load the qwen3-4b-2507 model in LMStudio
    - Start the local server (default port: 1234)
 
-4. **Set up environment variables**:
-   ```bash
-   cp .env.example .env
+4. **[Optional] Register for a free LangSmith account to get an API key**:
+   - This step is optional, but highly recommended to learn more about LangGraph and LangSmith. LangSmith is a platform for tracking and debugging LLM workflows
+   - Follow [this documentation](https://docs.smith.langchain.com/administration/how_to_guides/organization_management/create_account_api_key) to create an account and get an API key
+
+5. **Set up environment variables**:
+   - Create a `.env` file in the root directory of the project (make sure you add it to `.gitignore`)
+   - Add the following environment variables:
    ```
-   
-   The default configuration should work if LMStudio is running on localhost:1234:
-   ```
+   # LMStudio Configuration
    LMSTUDIO_BASE_URL=http://localhost:1234/v1
    LMSTUDIO_MODEL=qwen3-4b-2507
    LMSTUDIO_API_KEY=lm-studio
+
+   # LangSmith Configuration (optional - for tracing and monitoring)
+   LANGCHAIN_TRACING_V2=true
+   LANGCHAIN_API_KEY=<your-api-key>
+   LANGCHAIN_PROJECT=hello-langgraph
    ```
 
 ## Usage
 
-Run the main script:
+1. **Run the LangGraph app**:
 
 ```bash
-python main.py
+uv run main.py
 ```
 
-You'll be presented with three options:
+This is a standalone command line application. You'll be presented with three options:
 
-1. **Interactive Conversation**: Chat with the bot in real-time
-2. **Demo Workflow**: Run a predefined conversation sequence
-3. **Exit**: Quit the application
+   1. **Interactive Conversation**: Chat with the bot in real-time, type `quit`, `exit`, `bye`, or `q` (case insensitive) to exit
+   2. **Demo Workflow**: Run a predefined conversation sequence
+   3. **Exit**: Quit the application
+
+
+2. **Run LangGraph API server and LangGraph Studio**:
+
+If you are using Chrome browser, run:
+
+```bash
+$ langgraph dev
+
+        Welcome to
+
+╦  ┌─┐┌┐┌┌─┐╔═╗┬─┐┌─┐┌─┐┬ ┬
+║  ├─┤││││ ┬║ ╦├┬┘├─┤├─┘├─┤
+╩═╝┴ ┴┘└┘└─┘╚═╝┴└─┴ ┴┴  ┴ ┴
+
+- 🚀 API: http://127.0.0.1:2024
+- 🎨 Studio UI: https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2024
+- 📚 API Docs: http://127.0.0.1:2024/docs
+
+This in-memory server is designed for development and testing.
+For production use, please use LangGraph Platform.
+```
+
+If you are using Safari or Brave browser, they block plain HTTP traffic on localhost. You need to pass in a special `--tunnel` flag to use Cloudflare Tunnel to expose your local server.
+
+```bash
+$ langgraph dev --tunnel
+
+        Welcome to
+
+╦  ┌─┐┌┐┌┌─┐╔═╗┬─┐┌─┐┌─┐┬ ┬
+║  ├─┤││││ ┬║ ╦├┬┘├─┤├─┘├─┤
+╩═╝┴ ┴┘└┘└─┘╚═╝┴└─┴ ┴┴  ┴ ┴
+
+- 🚀 API: https://accurately-hydrogen-adware-batman.trycloudflare.com
+- 🎨 Studio UI: https://smith.langchain.com/studio/?baseUrl=https://accurately-hydrogen-adware-batman.trycloudflare.com
+- 📚 API Docs: https://accurately-hydrogen-adware-batman.trycloudflare.com/docs
+
+```
+
+   * API is where you can make API calls to the LangGraph application, e.g. we have included a `client.py` that shows how to interact through the API.
+   * LangGraph Studio is the UI for interacting with the LangGraph application. For more details on how to use LangGraph Studio, see [LangGraph Studio Quickstart](https://docs.langchain.com/langgraph-platform/quick-start-studio) and [LangGraph Studio Documentation](https://docs.langchain.com/langgraph-platform/langgraph-studio).
+   * API docs lists all the API endpoints and their parameters. You can directly test it out through the API docs UI.For more details on how to use the API, see [LangGraph API Documentation](https://docs.langchain.com/langgraph-platform/api).
+
+After you are done, you can stop the LangGraph API server by pressing `Ctrl+C` in the terminal.
+
+
+3. **Start the LangGraph API server, then run the client that sends requests through the API**
+
+You can directly use LangGraph API to build your application we include a `client.py` that shows how to interact through the API.
+
+First, start the LangGraph API server:
+```bash
+$ langgraph dev
+```
+
+Take a note of the API URL, it will be something like `http://localhost:2024`. You need to pass it to the client.
+
+Then, in another terminal, start the client:
+```bash
+$ uv run client.py
+```
+
+Somehow you cannot connect to LangGraph API server if you run in tunnel mode (`--tunnel`), the tunnel server name cannot be resolved you will get an error: `Failed to connect to LangGraph API server: [Errno 8] nodename nor servname provided, or not known`. So you need to start the LangGraph API server without tunnel mode.
+
+For more details on LangGraph API, see [LangGraph Python SDK Documentation](https://langchain-ai.github.io/langgraph/cloud/reference/sdk/python_sdk_ref/).
 
 ## Project Structure
 
 ```
 hello-langgraph/
 ├── main.py              # Main application with LangGraph workflow
+├── client.py            # Client for interacting with LangGraph API server through API/SDK
 ├── pyproject.toml       # Project dependencies and configuration
-├── .env.example         # Environment variables template
 ├── .env                 # Your environment variables (create this)
-├── README.md           # This file
-└── LICENSE             # License file
+├── .gitignore           # Git ignore file
+├── .python-version      # Python version file
+├── langgraph.json       # LangGraph configuration
+├── uv.lock              # UV lock file
+├── README.md            # This file
+└── LICENSE              # License file
 ```
 
 ## How It Works
@@ -133,6 +215,9 @@ class State(TypedDict):
    - Ensure qwen3-4b-2507 is properly downloaded in LMStudio
    - Check LMStudio logs for any model loading errors
    - Verify sufficient system resources (RAM/VRAM) for the model
+
+4. **Local LangGraph API Server Issues**:
+   - Safari and Brave browsers block plain HTTP traffic on localhost. When you run the LangGraph API server, instead of `langgraph dev`, use `langgraph dev --tunnel`. For more details, see this [troubleshooting guide](https://docs.langchain.com/langgraph-platform/troubleshooting-studio) and [langchain-cli manual](https://docs.langchain.com/langgraph-platform/cli).
 
 ## Dependencies
 
