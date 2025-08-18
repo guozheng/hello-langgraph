@@ -241,7 +241,15 @@ This project is licensed under the terms specified in the LICENSE file.
 
 ## Resources
 
-- [LangGraph Documentation](https://langchain-ai.github.io/langgraph/)
 - [LangChain Documentation](https://python.langchain.com/)
+- [LangGraph Documentation](https://langchain-ai.github.io/langgraph/)
+   - [Quick start guide: run a LangGraph application locally](https://docs.langchain.com/langgraph-platform/local-server)
+   - [LangGraph CLI reference](https://docs.langchain.com/langgraph-platform/cli#commands)
+   - [LangGraph Server API Documentation](https://docs.langchain.com/langgraph-platform/server-api-ref)
+   - [LangGraph Python SDK Documentation](https://langchain-ai.github.io/langgraph/cloud/reference/sdk/python_sdk_ref/)
+   - [Other LangGraph Platform Documentation](https://docs.langchain.com/langgraph-platform/reference-overview)
+   - [new-langgraph-project-python template github project](https://github.com/langchain-ai/new-langgraph-project), to use it, just run the command: `langgraph new <path_to_local_project> --template new-langgraph-project-python`
 - [LMStudio Documentation](https://lmstudio.ai/docs)
 - [Qwen Model Information](https://huggingface.co/Qwen)
+- [UV package manager](https://docs.astral.sh/uv/)
+- [UV tools](https://docs.astral.sh/uv/guides/tools/)
