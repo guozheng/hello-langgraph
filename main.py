@@ -48,6 +48,7 @@ def chatbot_node(state: State):
     response = llm.invoke(state["messages"])
     return {"messages": [response]}
 
+# Define workflow
 def create_workflow():
     """Create and compile the LangGraph workflow."""
     # Create the graph
